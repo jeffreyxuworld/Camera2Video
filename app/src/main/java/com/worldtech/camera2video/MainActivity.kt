@@ -17,10 +17,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         rxPermissions = RxPermissions(this)
-
-
-
-        tv_test1.setOnClickListener{
+        tv_test1.setOnClickListener {
             rxPermissions!!.request(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,
@@ -37,6 +34,5 @@ class MainActivity : AppCompatActivity() {
     private fun startRecordVideoActivity() {
         startActivity(Intent(this, RecordVideoActivity::class.java))
     }
-
 
 }

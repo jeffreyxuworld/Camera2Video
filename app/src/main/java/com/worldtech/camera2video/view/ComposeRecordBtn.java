@@ -16,7 +16,7 @@ public class ComposeRecordBtn extends RelativeLayout {
     private RecordStartView mIvRecordRing;
     private ImageView mIvRecordStart;
     private ImageView mIvRecordPause;
-    private ObjectAnimator recordRingZoomOutXAn,recordRingZoomOutYAn,recordStartZoomOutXAn,recordStartZoomOutYAn;
+    private ObjectAnimator recordRingZoomOutXAn, recordRingZoomOutYAn, recordStartZoomOutXAn, recordStartZoomOutYAn;
     private AnimatorSet animatorSet;
 
     public ComposeRecordBtn(Context context) {
@@ -34,95 +34,88 @@ public class ComposeRecordBtn extends RelativeLayout {
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         mContext = context;
         LayoutInflater.from(context).inflate(R.layout.compose_record_btn, this);
-        mIvRecordRing =  findViewById(R.id.iv_record_ring);
-        mIvRecordStart =  findViewById(R.id.iv_record);
-        mIvRecordPause =  findViewById(R.id.iv_record_pause);
+        mIvRecordRing = findViewById(R.id.iv_record_ring);
+        mIvRecordStart = findViewById(R.id.iv_record);
+        mIvRecordPause = findViewById(R.id.iv_record_pause);
     }
 
-    public void startRecord(){
+    public void startRecord() {
         gotoRecordMode();
     }
+
     public void resumeRecord() {
         gotoRecordMode();
         mIvRecordRing.resumeRecord();
     }
-    public void pauseRecord(){
+
+    public void pauseRecord() {
         gotoPauseMode();
     }
+
     public void stopRecord() {
         gotoNormalMode();
         mIvRecordRing.stopRecord();
     }
+
     public void releaseRecord() {
         mIvRecordRing.stopRecord();
         gotoNormalMode();
     }
+
     public void deleteLast() {
         clear();
         mIvRecordRing.deleteLast();
         gotoNormalMode();
     }
-    private void gotoPauseMode(){
+
+    private void gotoPauseMode() {
         mIvRecordPause.setVisibility(View.GONE);
         mIvRecordStart.setBackgroundResource(R.drawable.ugc_round_pause_record);
         mIvRecordStart.setVisibility(VISIBLE);
     }
-    private void gotoRecordMode(){
+
+    private void gotoRecordMode() {
         mIvRecordPause.setVisibility(View.VISIBLE);
         mIvRecordStart.setVisibility(GONE);
     }
-    public void gotoNormalMode(){
+
+    public void gotoNormalMode() {
         mIvRecordPause.setVisibility(View.GONE);
         mIvRecordStart.setVisibility(VISIBLE);
     }
+
     public void setProgress(int milliSecond) {
         mIvRecordRing.setProgress(milliSecond);
     }
-    public int getProcess(){
+
+    public int getProcess() {
         return mIvRecordRing.getProgress();
     }
 
-    public void clear(){
-        if(animatorSet != null){
+    public void clear() {
+        if (animatorSet != null) {
             animatorSet.cancel();
             animatorSet = null;
         }
-        if(recordRingZoomOutXAn != null){
+        if (recordRingZoomOutXAn != null) {
             recordRingZoomOutXAn.cancel();
             recordRingZoomOutXAn = null;
         }
-        if(recordRingZoomOutYAn != null){
+        if (recordRingZoomOutYAn != null) {
             recordRingZoomOutYAn.cancel();
             recordRingZoomOutYAn = null;
         }
-        if(recordStartZoomOutXAn != null){
+        if (recordStartZoomOutXAn != null) {
             recordStartZoomOutXAn.cancel();
             recordStartZoomOutXAn = null;
         }
-        if(recordStartZoomOutYAn != null){
+        if (recordStartZoomOutYAn != null) {
             recordStartZoomOutYAn.cancel();
             recordStartZoomOutYAn = null;
         }
-    }
-    private void recordPlayAni(float scale) {
-        clear();
-//        recordRingZoomOutXAn = ObjectAnimator.ofFloat(mIvRecordRing, "scaleX", scale);
-//        recordRingZoomOutYAn = ObjectAnimator.ofFloat(mIvRecordRing, "scaleY", scale);
-//        mIvRecordRing.setPivotX(mIvRecordRing.getMeasuredWidth() / 2);
-//        mIvRecordRing.setPivotY(mIvRecordRing.getMeasuredHeight() / 2);
-//        mIvRecordRing.invalidate();//显示的调用invalidate
-//
-//        recordStartZoomOutXAn = ObjectAnimator.ofFloat(mIvRecordStart, "scaleX", scale);
-//        recordStartZoomOutYAn = ObjectAnimator.ofFloat(mIvRecordStart, "scaleY", scale);
-//
-//        animatorSet = new AnimatorSet();
-//        animatorSet.setDuration(80);
-//        animatorSet.setInterpolator(new LinearInterpolator());
-//        animatorSet.play(recordRingZoomOutXAn).with(recordRingZoomOutYAn).with(recordStartZoomOutXAn).with(recordStartZoomOutYAn);
-//        animatorSet.start();
     }
 
 }

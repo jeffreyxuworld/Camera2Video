@@ -203,7 +203,6 @@ public class TCConfigPlayerView extends RelativeLayout implements View.OnClickLi
         if (0 != result) {
             stopPlay(true);
         }
-
     }
 
     public void pauseVod() {
@@ -310,8 +309,6 @@ public class TCConfigPlayerView extends RelativeLayout implements View.OnClickLi
             switch (state) {
                 //电话等待接听
                 case TelephonyManager.CALL_STATE_RINGING:
-                    if (player != null) player.setMute(true);
-                    break;
                 //电话接听
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     if (player != null) player.setMute(true);
@@ -339,4 +336,5 @@ public class TCConfigPlayerView extends RelativeLayout implements View.OnClickLi
         }
         mPhoneListener = null;
     }
+
 }

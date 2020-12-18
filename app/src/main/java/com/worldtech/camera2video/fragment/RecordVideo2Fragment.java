@@ -134,7 +134,7 @@ public class RecordVideo2Fragment extends Fragment implements RecordVideoInterfa
                 switchRecord();
                 break;
             case R.id.tv_upload:
-                //todo
+                //todo 上传视频
                 cameraControl.finishControl();
                 compose_record_btn.releaseRecord();
                 break;

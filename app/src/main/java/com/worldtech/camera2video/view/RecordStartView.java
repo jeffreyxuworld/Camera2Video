@@ -12,6 +12,7 @@ import android.view.View;
 import com.worldtech.camera2video.R;
 
 public class RecordStartView extends View {
+
     public final static int STATUS_DEF = 0;//初始状态
     public final static int STATUS_START = 1;//开始
     public final static int STATUS_PAUSE = 1;//暂停
@@ -71,7 +72,6 @@ public class RecordStartView extends View {
         mRingMax = typedArray.getInt(R.styleable.RecordStartView_mRingMax, 120000);
         typedArray.recycle();
 
-
         mRingPaint = new Paint();
         mRingPaint.setColor(mRingColor);
         mRingPaint.setStyle(Paint.Style.STROKE);
@@ -83,23 +83,15 @@ public class RecordStartView extends View {
         mRingProgressPaint.setStyle(Paint.Style.STROKE);
         mRingProgressPaint.setAntiAlias(true);
         mRingProgressPaint.setStrokeWidth(mRingWidth);
-
-
     }
 
-    public void pauseRecord() {
+//    public void pauseRecord() {
 //        record_status = STATUS_PAUSE;
 //        pauseTime = System.currentTimeMillis();
 //        lastRecordTime = pauseTime - startTime;
-    }
+//    }
 
-    /**
-     * 开始录制
-     */
-    public void startRecord() {
-    }
 
-    //
     public void resumeRecord() {
 //        record_status = STATUS_RESUME;
 //        startTime= System.currentTimeMillis();

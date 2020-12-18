@@ -49,8 +49,8 @@ import java.util.List;
 
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
-        MediaRecorder.OnErrorListener, TextureView.SurfaceTextureListener{
+public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
+        MediaRecorder.OnErrorListener, TextureView.SurfaceTextureListener {
     //拍照方向
     private static final SparseIntArray ORIENTATION = new SparseIntArray();
 
@@ -87,11 +87,11 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
 
     private File videoFile;
     private int maxTime = 120000;//最大录制时间
-    private long maxSize = 30*1024*1024*12;//最大录制大小 默认30m
+    private long maxSize = 30 * 1024 * 1024 * 12;//最大录制大小 默认30m
     private boolean isRecording;//是否录制中
     private int mCountTime;//当前录制时间
 
-    public CameraControl(Activity activity, TextureView textureView){
+    public CameraControl(Activity activity, TextureView textureView) {
         this.activity = activity;
         mTextureView = textureView;
 
@@ -100,34 +100,33 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
         mTextureView.setSurfaceTextureListener(this);
     }
 
-    public void setRecordVideoInterface(RecordVideoInterface videoInterface){
+    public void setRecordVideoInterface(RecordVideoInterface videoInterface) {
         mRecordVideoInterface = videoInterface;
     }
 
-    private void setSize(int width,int height){
+    private void setSize(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
     public void initCamera(int width, int height) {
-
-        setupCamera(width,height);
+        setupCamera(width, height);
         openCamera(mCameraId);//打开相机
     }
 
-    private void setupCamera(int width, int height){
+    private void setupCamera(int width, int height) {
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         //0表示后置摄像头,1表示前置摄像头
         try {
 //            mCameraId = manager.getCameraIdList()[0];
 //            mCameraIdFront = manager.getCameraIdList()[1];
             String[] cameraList = manager.getCameraIdList();
-            for (String id:cameraList){
+            for (String id : cameraList) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(id);
                 int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if(cOrientation == CameraCharacteristics.LENS_FACING_FRONT){
+                if (cOrientation == CameraCharacteristics.LENS_FACING_FRONT) {
                     mCameraIdFront = id;
-                }else {
+                } else {
                     mCameraId = id;
                 }
             }
@@ -141,7 +140,6 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             //选择预览尺寸
             mPreviewSize = Camera2Util.getMinPreSize(map.getOutputSizes(SurfaceTexture.class), width, height, 1000);
-
             //获取相机支持的最大拍照尺寸
             mCaptureSize = Collections.max(Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)), new Comparator<Size>() {
                 @Override
@@ -149,18 +147,16 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
                     return Long.signum(lhs.getWidth() * lhs.getHeight() - rhs.getHeight() * rhs.getWidth());
                 }
             });
-
-            configureTransform(width,height);
-
+            configureTransform(width, height);
             //此ImageReader用于拍照所需
             setupImageReader();
             //MediaRecorder用于录像所需
-
             mMediaRecorder = new MediaRecorder();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     //预览录像
     public void prepareMediaRecorder() {
         if (mCameraDevice == null || !mTextureView.isAvailable() || null == mPreviewSize) {
@@ -210,6 +206,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             e.printStackTrace();
         }
     }
+
     /**
      * ******************************openCamera(打开Camera)*****************************************
      */
@@ -230,8 +227,6 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
     }
 
 
-
-
     //开始录像
     public void startMediaRecorder() {
         // Start recording
@@ -249,8 +244,9 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             e.printStackTrace();
         }
     }
+
     /**
-     * ********************************************录像*********************************************
+     * 录像
      */
     private void setUpMediaRecorder() {
         try {
@@ -308,6 +304,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             e.printStackTrace();
         }
     }
+
     private void videoDir() {
         File sampleDir = App.context.getExternalFilesDir(FileUtils.VIDEO_PATH_NAME);
         if (!sampleDir.exists()) {
@@ -321,6 +318,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             e.printStackTrace();
         }
     }
+
     public void switchCamera() {
         if (isRecording) {
             CustomToast.showToast("录制中无法切换");
@@ -353,6 +351,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             }
         }
     }
+
     //停止录像
     public void stopRecording(boolean isSucessed) {
         if (videoFile == null || !isRecording) {
@@ -381,6 +380,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             updateCallBack(0);
         }
     }
+
     //重新配置打开相机
     public void resetCamera() {
         if (TextUtils.isEmpty(mCameraId)) {
@@ -394,8 +394,10 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
         setupCamera(width, height);
         openCamera(mCameraId);
     }
+
     /**
      * 回调录制时间
+     *
      * @param recordTime
      */
     private void updateCallBack(final int recordTime) {
@@ -419,13 +421,13 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        setSize(width,height);
+        setSize(width, height);
         initCamera(width, height);//配置相机参数
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        setSize(width,height);
+        setSize(width, height);
         configureTransform(width, height);
     }
 
@@ -440,7 +442,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
 
     }
 
-    class MyCameraCallback extends CameraDevice.StateCallback{
+    class MyCameraCallback extends CameraDevice.StateCallback {
 
         @Override
         public void onOpened(@NonNull CameraDevice camera) {
@@ -466,9 +468,8 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
     }
 
 
-
     /**
-     * ******************************Camera2成功打开，开始预览(startPreview)*************************
+     * Camera2成功打开，开始预览(startPreview)
      */
     public void startPreview() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
@@ -571,6 +572,7 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
         }, null);
 
     }
+
     private void unLockFocus() {
         try {
             // 构建失能AF的请求
@@ -583,8 +585,9 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             e.printStackTrace();
         }
     }
+
     /**
-     * **************************************清除操作************************************************
+     * 清除操作
      */
     public void finishControl() {
         try {
@@ -611,40 +614,5 @@ public class CameraControl implements Runnable,MediaRecorder.OnInfoListener,
             e.printStackTrace();
         }
     }
-    //    /**
-//     * ********************************************拍照*********************************************
-//     */
-//    public void capture() {
-//        if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
-//            return;
-//        }
-//        try {
-//            CaptureRequest.Builder mCaptureBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
-//            //获取屏幕方向
-//            int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-//            mCaptureBuilder.addTarget(mImageReader.getSurface());
-//            //isCameraFront是自定义的一个boolean值，用来判断是不是前置摄像头，是的话需要旋转180°，不然拍出来的照片会歪了
-//            if (isCameraFront) {
-//                mCaptureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATION.get(Surface.ROTATION_180));
-//            } else {
-//                mCaptureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATION.get(rotation));
-//            }
-//
-//            //锁定焦点
-//            mCaptureBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START);
-//
-//            CameraCaptureSession.CaptureCallback CaptureCallback = new CameraCaptureSession.CaptureCallback() {
-//                @Override
-//                public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
-//                    //拍完照unLockFocus
-//                    unLockFocus();
-//                }
-//            };
-//            mPreviewSession.stopRepeating();
-//            //咔擦拍照
-//            mPreviewSession.capture(mCaptureBuilder.build(), CaptureCallback, null);
-//        } catch (CameraAccessException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
 }

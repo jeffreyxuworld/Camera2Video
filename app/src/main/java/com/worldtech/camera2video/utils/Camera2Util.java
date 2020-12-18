@@ -8,13 +8,17 @@ import androidx.annotation.RequiresApi;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 这里为了方便，将部分方法封装到这个Util里面
- */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class Camera2Util {
-    // 通过对比得到与宽高比最接近的尺寸（如果有相同尺寸，优先选择，activity我们已经固定了方向，所以这里无需在做判断
 
+    /**
+     * 通过对比得到与宽高比最接近的尺寸（如果有相同尺寸，优先选择，activity我们已经固定了方向，所以这里无需在做判断
+     *
+     * @param sizeMap
+     * @param surfaceWidth
+     * @param surfaceHeight
+     * @return
+     */
     protected static Size getCloselyPreSize(Size[] sizeMap, int surfaceWidth, int surfaceHeight) {
         int ReqTmpWidth;
         int ReqTmpHeight;
