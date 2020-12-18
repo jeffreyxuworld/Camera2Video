@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Camera2Video</string>
+    <string name="permission_camera_image_failed_hint">没有相机或者存储权限，请在使用前授权。</string>
+    <string name="record_video_error">视频录制失败</string>
+    <string name="aleast_record_5s">至少录制5s</string>
+    <string name="take_photo_again">重拍</string>
+    <string name="upload">上传</string>
+
+
+</resources>

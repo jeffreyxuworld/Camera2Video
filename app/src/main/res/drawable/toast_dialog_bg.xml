@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- 设置圆角半径  还可分别详细设置上下左右4个圆角-->
+    <corners android:radius="17dp"/>
+    <!-- 内部颜色  -->
+    <solid android:color="#E6333333"/>
+</shape>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.worldtech.camera2video.view.RecordStartView
+        android:id="@+id/iv_record_ring"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+         />
+    <ImageView
+        android:id="@+id/iv_record"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ugc_start_record" />
+
+    <ImageView
+        android:id="@+id/iv_record_pause"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ugc_pause_record"
+        android:visibility="gone" />
+
+</RelativeLayout>
