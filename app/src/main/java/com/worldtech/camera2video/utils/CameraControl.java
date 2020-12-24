@@ -115,12 +115,12 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
     }
 
     private void setupCamera(int width, int height) {
-        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
-        //0表示后置摄像头,1表示前置摄像头
+        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE); //初始化 CameraManager，主要用于管理系统摄像头
         try {
+            //0表示后置摄像头,1表示前置摄像头
 //            mCameraId = manager.getCameraIdList()[0];
 //            mCameraIdFront = manager.getCameraIdList()[1];
-            String[] cameraList = manager.getCameraIdList();
+            String[] cameraList = manager.getCameraIdList(); //获取Android设备的摄像头列表
             for (String id : cameraList) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(id);
                 int cOrientation = characteristics.get(CameraCharacteristics.LENS_FACING);
@@ -132,6 +132,7 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
             }
             //前置摄像头和后置摄像头的参数属性不同，所以这里要做下判断
             if (isCameraFront) {
+                //获取摄像头的详细参数和支持的功能
                 characteristics = manager.getCameraCharacteristics(mCameraIdFront);
             } else {
                 characteristics = manager.getCameraCharacteristics(mCameraId);
@@ -170,7 +171,7 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD); //创建捕获请求，在需要预览、拍照、再次预览的时候都需要通过创建请求来完成
             List<Surface> surfaces = new ArrayList<>();
 
             // Set up Surface for the camera preview
@@ -208,7 +209,7 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
     }
 
     /**
-     * ******************************openCamera(打开Camera)*****************************************
+     * 打开Camera
      */
     @SuppressLint("MissingPermission")
     public void openCamera(String CameraId) {
@@ -442,6 +443,7 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
 
     }
 
+    //通过CameraDevice.StateCallback监听摄像头的状态（主要包括onOpened、onClosed、onDisconnected、onErro四种状态）
     class MyCameraCallback extends CameraDevice.StateCallback {
 
         @Override
@@ -496,6 +498,7 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
             mCameraDevice.createCaptureSession(Arrays.asList(mSurface, mImageReader.getSurface()), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(CameraCaptureSession session) {
+                    //系统向摄像头发送 Capture 请求，而摄像头会返回 CameraMetadata，这一切建立在一个叫作 CameraCaptureSession 的会话中
                     try {
                         //创建捕获请求
                         mCaptureRequest = mPreviewBuilder.build();
@@ -514,7 +517,7 @@ public class CameraControl implements Runnable, MediaRecorder.OnInfoListener,
             }, null);
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("yunli", "捕获的异常" + e.toString());
+            Log.e("lei", "捕获的异常" + e.toString());
         }
     }
 
