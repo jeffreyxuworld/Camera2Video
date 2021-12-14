@@ -1,57 +1,49 @@
-package com.worldtech.camera2video.activity;
+package com.worldtech.camera2video.activity
 
-import android.os.Build;
-import android.os.Bundle;
-import android.widget.ImageView;
+import android.os.Build
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.worldtech.camera2video.R
+import com.worldtech.camera2video.databinding.ActivityRecordVideoBinding
+import com.worldtech.camera2video.fragment.RecordVideo2Fragment
+import com.worldtech.camera2video.fragment.RecordVideoFragment
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+class RecordVideoActivity : FragmentActivity() {
 
-import com.worldtech.camera2video.R;
-import com.worldtech.camera2video.fragment.RecordVideo2Fragment;
-import com.worldtech.camera2video.fragment.RecordVideoFragment;
+    private lateinit var currentBinding: ActivityRecordVideoBinding
+    private var videoFragment: Fragment? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        currentBinding = ActivityRecordVideoBinding.inflate(layoutInflater)
+        setContentView(currentBinding.root)
 
-public class RecordVideoActivity extends FragmentActivity {
-
-    private ImageView cancel;
-    private Fragment videoFragment;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_record_video);
-
-
-        cancel = findViewById(R.id.cancel);
-        cancel.setOnClickListener(v -> {
-            finishFragment();
-        });
-        videoFragment = getRecordVideoFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_container,videoFragment ,"RecordVideoFragment")
-                .addToBackStack(null)
-                .commit();
+        currentBinding.cancel.setOnClickListener(View.OnClickListener { v: View? -> finishFragment() })
+        videoFragment = recordVideoFragment
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_container, videoFragment!!, "RecordVideoFragment")
+            .addToBackStack(null)
+            .commit()
     }
 
-    @Override
-    public void onBackPressed() {
-        finishFragment();
+    override fun onBackPressed() {
+        finishFragment()
     }
 
-    public Fragment getRecordVideoFragment(){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return new RecordVideoFragment();
+    private val recordVideoFragment: Fragment
+        get() = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            RecordVideoFragment()
         } else {
-            return new RecordVideo2Fragment();
-        }
-    }
-    public void finishFragment(){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
-//            ((RecordVideoFragment)videoFragment).exit();
-        }else {
-            finish();
+            RecordVideo2Fragment()
         }
 
+    private fun finishFragment() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            ((RecordVideoFragment)videoFragment).exit();
+        } else {
+            finish()
+        }
     }
 }

@@ -1,82 +1,78 @@
-package com.worldtech.camera2video.utils;
+package com.worldtech.camera2video.utils
 
-import android.content.Context;
-import android.os.Build;
-import android.os.Environment;
-import android.text.TextUtils;
+import java.io.File
+import com.worldtech.camera2video.App
+import android.os.Build
+import android.os.Environment
+import java.lang.Exception
+import android.text.TextUtils
 
-import com.worldtech.camera2video.App;
-
-import java.io.File;
-
-public class FileUtils {
-
-    public static final String VIDEO_PATH_NAME = "videorecord";
+object FileUtils {
+    const val VIDEO_PATH_NAME = "videorecord"
 
     /**
      * 根目录下创建文件夹
      * @param dirName（文件夹名称）
      * @return
      */
-    public static File getDiskCacheDir(String dirName) {
-        File file = null;
-        String cachePath = getCachePath();
-        file = new File(cachePath, dirName);
+    @JvmStatic
+    fun getDiskCacheDir(dirName: String?): File {
+        var file: File? = null
+        val cachePath = cachePath
+        file = File(cachePath, dirName)
         if (file.exists()) {
-            return file;
+            return file
         } else {
             if (file.mkdir()) {
-                return file;
+                return file
             }
         }
-        return file;
-    }
+        return file
+    }//路径是:/data/data/< package name >/cach/…//路径是:/data/data/< package name >/cach/…//SD根目录:/mnt/sdcard/ (6.0后写入需要用户授权)//路径为:/mnt/sdcard//Android/data/< package name >/cach/…
 
     /**
      * app 缓存根目录
      * @return
      */
-    public static String getCachePath(){
-        Context context = App.context;
-        String cachePath = null;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            cachePath = App.context.getExternalFilesDir(null).getAbsolutePath();
-        }else {
-            if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
-                    || !Environment.isExternalStorageRemovable()) {
-                if (context.getExternalCacheDir() != null) {
-                    cachePath = context.getExternalCacheDir().getPath(); //路径为:/mnt/sdcard//Android/data/< package name >/cach/…
-                } else {
-                    try {
-                        cachePath = Environment.getExternalStorageDirectory().getPath();   //SD根目录:/mnt/sdcard/ (6.0后写入需要用户授权)
-                    } catch (Exception e) {
-                        cachePath = context.getCacheDir().getPath();    //路径是:/data/data/< package name >/cach/…
+    val cachePath: String?
+        get() {
+            val context = App.context
+            var cachePath: String? = null
+            cachePath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                App.context!!.getExternalFilesDir(null)!!.absolutePath
+            } else {
+                if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageRemovable()) {
+                    if (context!!.externalCacheDir != null) {
+                        context.externalCacheDir!!.path //路径为:/mnt/sdcard//Android/data/< package name >/cach/…
+                    } else {
+                        try {
+                            Environment.getExternalStorageDirectory().path //SD根目录:/mnt/sdcard/ (6.0后写入需要用户授权)
+                        } catch (e: Exception) {
+                            context.cacheDir.path //路径是:/data/data/< package name >/cach/…
+                        }
                     }
+                } else {
+                    context!!.cacheDir.path //路径是:/data/data/< package name >/cach/…
                 }
-            } else {
-                cachePath = context.getCacheDir().getPath();    //路径是:/data/data/< package name >/cach/…
             }
+            return cachePath
         }
 
-        return cachePath;
-    }
-
-    public static void deleteFile(String filePath) {
-        if(TextUtils.isEmpty(filePath)){
-            return;
+    fun deleteFile(filePath: String?) {
+        if (TextUtils.isEmpty(filePath)) {
+            return
         }
-        File file = new File(filePath);
+        val file = File(filePath)
         if (file.exists()) {
-            if (file.isFile()) {
-                file.delete();
+            if (file.isFile) {
+                file.delete()
             } else {
-                String[] filePaths = file.list();
-                for (String path : filePaths) {
-                    deleteFile(filePath + File.separator + path);
+                val filePaths = file.list()
+                for (path in filePaths) {
+                    deleteFile(filePath + File.separator + path)
                 }
-                file.delete();
+                file.delete()
             }
         }
     }
-
 }

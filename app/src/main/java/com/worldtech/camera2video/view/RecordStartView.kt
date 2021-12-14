@@ -1,158 +1,127 @@
-package com.worldtech.camera2video.view;
+package com.worldtech.camera2video.view
 
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.util.AttributeSet;
-import android.view.View;
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.util.AttributeSet
+import android.view.View
+import com.worldtech.camera2video.R
 
-import com.worldtech.camera2video.R;
+class RecordStartView(//开始时间
+    private var mContext: Context, attrs: AttributeSet?, defStyleAttr: Int
+) : View(
+    mContext, attrs, defStyleAttr
+) {
+    val CENTER_WHAT = 100
+    val RING_WHAT = 101
+    private val mLongPressRunnable: Runnable? = null
+    private val mRingProgressPaint: Paint
+    private val mCenterPaint: Paint? = null
+    private val mRingPaint: Paint
 
-public class RecordStartView extends View {
-
-    public final static int STATUS_DEF = 0;//初始状态
-    public final static int STATUS_START = 1;//开始
-    public final static int STATUS_PAUSE = 1;//暂停
-    public final static int STATUS_RESUME = 2;//恢复
-    public final static int STATUS_STOP = 3;//结束
-
-    public final int CENTER_WHAT = 100;
-    public final int RING_WHAT = 101;
-    private Runnable mLongPressRunnable;
-    private Paint mRingProgressPaint;
-    private Paint mCenterPaint;
-    private Paint mRingPaint;
     //圆环颜色
-    public int mRingColor;
+    var mRingColor: Int
+
     // 圆环进度的颜色
-    public int mRingProgressColor;
+    var mRingProgressColor: Int
+
     //圆环的宽度
-    public int mRingWidth;
+    var mRingWidth: Int
 
     //控件宽高
-    private int mWidth;
-    private int mHeight;
+    private var mWidth = 0
+    private var mHeight = 0
+
     //中间X坐标
-    private int centerX;
+    private var centerX = 0
+
     //中间Y坐标
-    private int centerY;
+    private var centerY = 0
+
     //进度
-    private int progress;
+    internal var progress = 0
+
     //中间方法比例
-    private float centerScale = 0.8f;
+    private val centerScale = 0.8f
+
     //半径
-    private int radius;
+    private var radius = 0
+
     //最大时间
-    private int mRingMax = 120000;
+    private var mRingMax = 120000
+
     //时间间隔
-    private long timeSpan = 1000;
-    //开始时间
-    private Context mContext;
+    private val timeSpan: Long = 1000
 
-    public RecordStartView(Context context) {
-        this(context, null);
-        mContext = context;
+    constructor(context: Context) : this(context, null) {
+        mContext = context
     }
 
-    public RecordStartView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-        mContext = context;
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0) {
+        mContext = context
     }
 
-    public RecordStartView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        mContext = context;
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RecordStartView);
-        mRingColor = typedArray.getColor(R.styleable.RecordStartView_mRingColor, getResources().getColor(R.color.record_progress_bg));
-        mRingProgressColor = typedArray.getColor(R.styleable.RecordStartView_mRingProgressColor, Color.WHITE);
-        mRingWidth = typedArray.getDimensionPixelOffset(R.styleable.RecordStartView_mRingWidth, 20);
-        mRingMax = typedArray.getInt(R.styleable.RecordStartView_mRingMax, 120000);
-        typedArray.recycle();
-
-        mRingPaint = new Paint();
-        mRingPaint.setColor(mRingColor);
-        mRingPaint.setStyle(Paint.Style.STROKE);
-        mRingPaint.setAntiAlias(true);
-        mRingPaint.setStrokeWidth(mRingWidth);
-
-        mRingProgressPaint = new Paint();
-        mRingProgressPaint.setColor(mRingProgressColor);
-        mRingProgressPaint.setStyle(Paint.Style.STROKE);
-        mRingProgressPaint.setAntiAlias(true);
-        mRingProgressPaint.setStrokeWidth(mRingWidth);
-    }
-
-//    public void pauseRecord() {
-//        record_status = STATUS_PAUSE;
-//        pauseTime = System.currentTimeMillis();
-//        lastRecordTime = pauseTime - startTime;
-//    }
-
-
-    public void resumeRecord() {
+    //    public void pauseRecord() {
+    //        record_status = STATUS_PAUSE;
+    //        pauseTime = System.currentTimeMillis();
+    //        lastRecordTime = pauseTime - startTime;
+    //    }
+    fun resumeRecord() {
 //        record_status = STATUS_RESUME;
 //        startTime= System.currentTimeMillis();
     }
 
-    public void stopRecord() {
-        progress = 0;
-        postInvalidate();
+    fun stopRecord() {
+        progress = 0
+        postInvalidate()
     }
 
-    public void deleteLast() {
-        stopRecord();
+    fun deleteLast() {
+        stopRecord()
     }
 
-    public void setProgress(int milliSecond) {
+    fun setProgress(milliSecond: Int) {
         if (progress < mRingMax) {
-            progress = milliSecond;
-            postInvalidate();
+            progress = milliSecond
+            postInvalidate()
         } else {
-            stopRecord();
+            stopRecord()
         }
     }
 
-    public int getProgress() {
-        return progress;
+    fun getProgress(): Int {
+        return progress
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int width, height;
-        if (widthMode == MeasureSpec.AT_MOST) width = dp2px(100);
-        else width = widthSize;
-        if (heightMode == MeasureSpec.AT_MOST) height = dp2px(100);
-        else height = heightSize;
-        setMeasuredDimension(Math.min(width, height), Math.min(width, height));
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+        val width: Int
+        val height: Int
+        width = if (widthMode == MeasureSpec.AT_MOST) dp2px(100) else widthSize
+        height = if (heightMode == MeasureSpec.AT_MOST) dp2px(100) else heightSize
+        setMeasuredDimension(Math.min(width, height), Math.min(width, height))
     }
 
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        mWidth = getWidth();
-        mHeight = getHeight();
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        mWidth = width
+        mHeight = height
         //获取中心点的位置
-        centerX = getWidth() / 2;
-        centerY = getHeight() / 2;
-        radius = (centerX - mRingWidth / 2) - 10;
+        centerX = width / 2
+        centerY = height / 2
+        radius = centerX - mRingWidth / 2 - 10
     }
 
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-//        drawCenter(canvas);
-        drawRing(canvas);
-        drawRingProgress(canvas);
-
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        //        drawCenter(canvas);
+        drawRing(canvas)
+        drawRingProgress(canvas)
     }
 
     /**
@@ -160,8 +129,13 @@ public class RecordStartView extends View {
      *
      * @param canvas
      */
-    private void drawRing(Canvas canvas) {
-        canvas.drawCircle(mWidth / 2, mHeight / 2, radius, mRingPaint);
+    private fun drawRing(canvas: Canvas) {
+        canvas.drawCircle(
+            (mWidth / 2).toFloat(),
+            (mHeight / 2).toFloat(),
+            radius.toFloat(),
+            mRingPaint
+        )
     }
 
     /**
@@ -169,21 +143,29 @@ public class RecordStartView extends View {
      *
      * @param canvas
      */
-    private void drawCenter(Canvas canvas) {
-        canvas.drawCircle(centerX, centerY, centerScale * radius, mCenterPaint);
+    private fun drawCenter(canvas: Canvas) {
+        canvas.drawCircle(
+            centerX.toFloat(),
+            centerY.toFloat(),
+            centerScale * radius,
+            mCenterPaint!!
+        )
     }
-
 
     /**
      * 绘制圆环进度
      *
      * @param canvas
      */
-    private void drawRingProgress(Canvas canvas) {
-        RectF rectF = new RectF(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
-        canvas.drawArc(rectF, -90, 360 * (1.0f * progress / mRingMax), false, mRingProgressPaint);
+    private fun drawRingProgress(canvas: Canvas) {
+        val rectF = RectF(
+            (centerX - radius).toFloat(),
+            (centerY - radius).toFloat(),
+            (centerX + radius).toFloat(),
+            (centerY + radius).toFloat()
+        )
+        canvas.drawArc(rectF, -90f, 360 * (1.0f * progress / mRingMax), false, mRingProgressPaint)
     }
-
 
     /**
      * dp转px
@@ -191,20 +173,49 @@ public class RecordStartView extends View {
      * @param dp
      * @return
      */
-    public int dp2px(int dp) {
-        float density = getContext().getResources().getDisplayMetrics().density;
-        return (int) (dp * density + 0.5f);
+    fun dp2px(dp: Int): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density + 0.5f).toInt()
     }
-
 
     /**
      * 设置最大时间
      *
      * @param maxTime
      */
-    public void setMaxTime(int maxTime) {
-        this.mRingMax = maxTime;
+    fun setMaxTime(maxTime: Int) {
+        mRingMax = maxTime
     }
 
+    companion object {
+        const val STATUS_DEF = 0 //初始状态
+        const val STATUS_START = 1 //开始
+        const val STATUS_PAUSE = 1 //暂停
+        const val STATUS_RESUME = 2 //恢复
+        const val STATUS_STOP = 3 //结束
+    }
 
+    init {
+        val typedArray = mContext.obtainStyledAttributes(attrs, R.styleable.RecordStartView)
+        mRingColor = typedArray.getColor(
+            R.styleable.RecordStartView_mRingColor, resources.getColor(
+                R.color.record_progress_bg
+            )
+        )
+        mRingProgressColor =
+            typedArray.getColor(R.styleable.RecordStartView_mRingProgressColor, Color.WHITE)
+        mRingWidth = typedArray.getDimensionPixelOffset(R.styleable.RecordStartView_mRingWidth, 20)
+        mRingMax = typedArray.getInt(R.styleable.RecordStartView_mRingMax, 120000)
+        typedArray.recycle()
+        mRingPaint = Paint()
+        mRingPaint.color = mRingColor
+        mRingPaint.style = Paint.Style.STROKE
+        mRingPaint.isAntiAlias = true
+        mRingPaint.strokeWidth = mRingWidth.toFloat()
+        mRingProgressPaint = Paint()
+        mRingProgressPaint.color = mRingProgressColor
+        mRingProgressPaint.style = Paint.Style.STROKE
+        mRingProgressPaint.isAntiAlias = true
+        mRingProgressPaint.strokeWidth = mRingWidth.toFloat()
+    }
 }

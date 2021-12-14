@@ -1,50 +1,46 @@
-package com.worldtech.camera2video.view;
+package com.worldtech.camera2video.view
 
-import android.content.Context;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.LayoutInflater
+import com.worldtech.camera2video.App
+import android.widget.TextView
+import android.widget.Toast
+import android.view.WindowManager
+import android.content.Context
+import android.view.Gravity
+import com.worldtech.camera2video.R
+import java.lang.Exception
 
-import com.worldtech.camera2video.App;
-import com.worldtech.camera2video.R;
-
-
-public class CustomToast {
-    public static void showToast(int txtid){
+object CustomToast {
+    fun showToast(txtId: Int?) {
         try {
-            View toastRoot = LayoutInflater.from(App.context).inflate(R.layout.custom_toast, null);
-            TextView mTextView = toastRoot.findViewById(R.id.message);
-            mTextView.setText(txtid);
-            Toast toastStart = new Toast(App.context);
-            WindowManager wm = (WindowManager) App.context.getSystemService(Context.WINDOW_SERVICE);
-            int height = wm.getDefaultDisplay().getHeight();
-            toastStart.setGravity(Gravity.TOP, 0, height / 2);
-            toastStart.setDuration(Toast.LENGTH_SHORT);
-            toastStart.setView(toastRoot);
-            toastStart.show();
-        }catch (Exception e){
-
+            val toastRoot = LayoutInflater.from(App.context).inflate(R.layout.custom_toast, null)
+            val mTextView = toastRoot.findViewById<TextView>(R.id.message)
+            mTextView.setText(txtId!!)
+            val toastStart = Toast(App.context)
+            val wm = App.context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val height = wm.defaultDisplay.height
+            toastStart.setGravity(Gravity.TOP, 0, height / 2)
+            toastStart.duration = Toast.LENGTH_SHORT
+            toastStart.view = toastRoot
+            toastStart.show()
+        } catch (e: Exception) {
         }
-
     }
-    public static void showToast(String name){
+
+    @JvmStatic
+    fun showToast(name: String?) {
         try {
-            View toastRoot = LayoutInflater.from(App.context).inflate(R.layout.custom_toast, null);
-            TextView mTextView = toastRoot.findViewById(R.id.message);
-            mTextView.setText(name);
-            Toast toastStart = new Toast(App.context);
-            WindowManager wm = (WindowManager) App.context.getSystemService(Context.WINDOW_SERVICE);
-            int height = wm.getDefaultDisplay().getHeight();
-            toastStart.setGravity(Gravity.TOP, 0, height / 2);
-            toastStart.setDuration(Toast.LENGTH_SHORT);
-            toastStart.setView(toastRoot);
-            toastStart.show();
-        }catch (Exception e){
-
+            val toastRoot = LayoutInflater.from(App.context).inflate(R.layout.custom_toast, null)
+            val mTextView = toastRoot.findViewById<TextView>(R.id.message)
+            mTextView.text = name
+            val toastStart = Toast(App.context)
+            val wm = App.context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+            val height = wm.defaultDisplay.height
+            toastStart.setGravity(Gravity.TOP, 0, height / 2)
+            toastStart.duration = Toast.LENGTH_SHORT
+            toastStart.view = toastRoot
+            toastStart.show()
+        } catch (e: Exception) {
         }
-
     }
 }

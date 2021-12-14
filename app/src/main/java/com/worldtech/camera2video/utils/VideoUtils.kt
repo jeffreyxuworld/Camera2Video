@@ -1,28 +1,26 @@
-package com.worldtech.camera2video.utils;
+package com.worldtech.camera2video.utils
 
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
+import java.util.HashMap
+import java.lang.IllegalArgumentException
 
-import java.util.HashMap;
-
-public class VideoUtils {
-
+object VideoUtils {
     //获取网络视频第一帧
-    public static Bitmap getNetVideoBitmap(String videoUrl) {
-        Bitmap bitmap = null;
-
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+    fun getNetVideoBitmap(videoUrl: String?): Bitmap? {
+        var bitmap: Bitmap? = null
+        val retriever = MediaMetadataRetriever()
         try {
             //根据url获取缩略图
-            retriever.setDataSource(videoUrl, new HashMap());
+            retriever.setDataSource(videoUrl, HashMap<String, String>())
             //获得第一帧图片
-            bitmap = retriever.getFrameAtTime();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            bitmap = retriever.frameAtTime
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
         } finally {
-            retriever.release();
+            retriever.release()
         }
-        return bitmap;
+        return bitmap
     }
 
     /**
@@ -30,10 +28,10 @@ public class VideoUtils {
      * @param path
      * @return
      */
-    public  static Bitmap getVideoThumb(String path) {
-        MediaMetadataRetriever media = new MediaMetadataRetriever();
-        media.setDataSource(path);
-        return media.getFrameAtTime();
+    @JvmStatic
+    fun getVideoThumb(path: String?): Bitmap? {
+        val media = MediaMetadataRetriever()
+        media.setDataSource(path)
+        return media.frameAtTime
     }
-
 }

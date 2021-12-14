@@ -1,23 +1,27 @@
 package com.worldtech.camera2video
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.worldtech.camera2video.activity.RecordVideoActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import com.worldtech.camera2video.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var currentBinding: ActivityMainBinding
     private var rxPermissions: RxPermissions? = null
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        currentBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(currentBinding.root)
 
         rxPermissions = RxPermissions(this)
-        tv_test1.setOnClickListener {
+        currentBinding.tvRecordVideo.setOnClickListener {
             rxPermissions!!.request(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO,

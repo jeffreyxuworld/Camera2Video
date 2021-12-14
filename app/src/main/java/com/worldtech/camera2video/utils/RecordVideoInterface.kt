@@ -1,27 +1,25 @@
-package com.worldtech.camera2video.utils;
+package com.worldtech.camera2video.utils
 
-public interface RecordVideoInterface {
-
+interface RecordVideoInterface {
     /**
      * 开始录制
      */
-    void  startRecordRes();
+    fun startRecordRes()
 
     /**
      * 正在录制
      * @param recordTime 录制的时间
      */
-    void  onRecording(long recordTime);
+    fun onRecording(recordTime: Long)
 
     /**
      * 录制完成
      * @param videoPath  录制保存的路径
      */
-    void  onRecordFinish(String videoPath);
+    fun onRecordFinish(videoPath: String?)
 
     /**
      * 录制出问题
      */
-    void  onRecordError();
-
+    fun onRecordError()
 }

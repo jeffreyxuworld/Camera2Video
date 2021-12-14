@@ -1,121 +1,121 @@
-package com.worldtech.camera2video.view;
+package com.worldtech.camera2video.view
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import com.worldtech.camera2video.R
 
-import com.worldtech.camera2video.R;
+class ComposeRecordBtn : RelativeLayout {
+    private var mContext: Context? = null
+    private var mIvRecordRing: RecordStartView? = null
+    private var mIvRecordStart: ImageView? = null
+    private var mIvRecordPause: ImageView? = null
+    private var recordRingZoomOutXAn: ObjectAnimator? = null
+    private var recordRingZoomOutYAn: ObjectAnimator? = null
+    private var recordStartZoomOutXAn: ObjectAnimator? = null
+    private var recordStartZoomOutYAn: ObjectAnimator? = null
+    private var animatorSet: AnimatorSet? = null
 
-public class ComposeRecordBtn extends RelativeLayout {
-    private Context mContext;
-    private RecordStartView mIvRecordRing;
-    private ImageView mIvRecordStart;
-    private ImageView mIvRecordPause;
-    private ObjectAnimator recordRingZoomOutXAn, recordRingZoomOutYAn, recordStartZoomOutXAn, recordStartZoomOutYAn;
-    private AnimatorSet animatorSet;
-
-    public ComposeRecordBtn(Context context) {
-        super(context);
-        init(context);
+    constructor(context: Context) : super(context) {
+        init(context)
     }
 
-    public ComposeRecordBtn(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        init(context)
     }
 
-    public ComposeRecordBtn(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context);
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        init(context)
     }
 
-    private void init(Context context) {
-        mContext = context;
-        LayoutInflater.from(context).inflate(R.layout.compose_record_btn, this);
-        mIvRecordRing = findViewById(R.id.iv_record_ring);
-        mIvRecordStart = findViewById(R.id.iv_record);
-        mIvRecordPause = findViewById(R.id.iv_record_pause);
+    private fun init(context: Context) {
+        mContext = context
+        LayoutInflater.from(context).inflate(R.layout.compose_record_btn, this)
+        mIvRecordRing = findViewById(R.id.iv_record_ring)
+        mIvRecordStart = findViewById(R.id.iv_record)
+        mIvRecordPause = findViewById(R.id.iv_record_pause)
     }
 
-    public void startRecord() {
-        gotoRecordMode();
+    fun startRecord() {
+        gotoRecordMode()
     }
 
-    public void resumeRecord() {
-        gotoRecordMode();
-        mIvRecordRing.resumeRecord();
+    fun resumeRecord() {
+        gotoRecordMode()
+        mIvRecordRing!!.resumeRecord()
     }
 
-    public void pauseRecord() {
-        gotoPauseMode();
+    fun pauseRecord() {
+        gotoPauseMode()
     }
 
-    public void stopRecord() {
-        gotoNormalMode();
-        mIvRecordRing.stopRecord();
+    fun stopRecord() {
+        gotoNormalMode()
+        mIvRecordRing!!.stopRecord()
     }
 
-    public void releaseRecord() {
-        mIvRecordRing.stopRecord();
-        gotoNormalMode();
+    fun releaseRecord() {
+        mIvRecordRing!!.stopRecord()
+        gotoNormalMode()
     }
 
-    public void deleteLast() {
-        clear();
-        mIvRecordRing.deleteLast();
-        gotoNormalMode();
+    fun deleteLast() {
+        clear()
+        mIvRecordRing!!.deleteLast()
+        gotoNormalMode()
     }
 
-    private void gotoPauseMode() {
-        mIvRecordPause.setVisibility(View.GONE);
-        mIvRecordStart.setBackgroundResource(R.drawable.ugc_round_pause_record);
-        mIvRecordStart.setVisibility(VISIBLE);
+    private fun gotoPauseMode() {
+        mIvRecordPause!!.visibility = GONE
+        mIvRecordStart!!.setBackgroundResource(R.drawable.ugc_round_pause_record)
+        mIvRecordStart!!.visibility = VISIBLE
     }
 
-    private void gotoRecordMode() {
-        mIvRecordPause.setVisibility(View.VISIBLE);
-        mIvRecordStart.setVisibility(GONE);
+    private fun gotoRecordMode() {
+        mIvRecordPause!!.visibility = VISIBLE
+        mIvRecordStart!!.visibility = GONE
     }
 
-    public void gotoNormalMode() {
-        mIvRecordPause.setVisibility(View.GONE);
-        mIvRecordStart.setVisibility(VISIBLE);
+    fun gotoNormalMode() {
+        mIvRecordPause!!.visibility = GONE
+        mIvRecordStart!!.visibility = VISIBLE
     }
 
-    public void setProgress(int milliSecond) {
-        mIvRecordRing.setProgress(milliSecond);
+    fun setProgress(milliSecond: Int) {
+        mIvRecordRing!!.progress = milliSecond
     }
 
-    public int getProcess() {
-        return mIvRecordRing.getProgress();
-    }
+    val process: Int
+        get() = mIvRecordRing!!.progress
 
-    public void clear() {
+    fun clear() {
         if (animatorSet != null) {
-            animatorSet.cancel();
-            animatorSet = null;
+            animatorSet!!.cancel()
+            animatorSet = null
         }
         if (recordRingZoomOutXAn != null) {
-            recordRingZoomOutXAn.cancel();
-            recordRingZoomOutXAn = null;
+            recordRingZoomOutXAn!!.cancel()
+            recordRingZoomOutXAn = null
         }
         if (recordRingZoomOutYAn != null) {
-            recordRingZoomOutYAn.cancel();
-            recordRingZoomOutYAn = null;
+            recordRingZoomOutYAn!!.cancel()
+            recordRingZoomOutYAn = null
         }
         if (recordStartZoomOutXAn != null) {
-            recordStartZoomOutXAn.cancel();
-            recordStartZoomOutXAn = null;
+            recordStartZoomOutXAn!!.cancel()
+            recordStartZoomOutXAn = null
         }
         if (recordStartZoomOutYAn != null) {
-            recordStartZoomOutYAn.cancel();
-            recordStartZoomOutYAn = null;
+            recordStartZoomOutYAn!!.cancel()
+            recordStartZoomOutYAn = null
         }
     }
-
 }

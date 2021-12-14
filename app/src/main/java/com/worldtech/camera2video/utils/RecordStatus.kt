@@ -1,7 +1,7 @@
-package com.worldtech.camera2video.utils;
+package com.worldtech.camera2video.utils
 
-public class RecordStatus {
-    public static final int TYPE_DEFAULT= 0;
-    public static final int TYPE_START_RECORD = 1;
-    public static final int TYPE_STOP_RECORD = 2;
+object RecordStatus {
+    const val TYPE_DEFAULT = 0
+    const val TYPE_START_RECORD = 1
+    const val TYPE_STOP_RECORD = 2
 }

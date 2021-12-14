@@ -1,16 +1,18 @@
-package com.worldtech.camera2video;
+package com.worldtech.camera2video
 
-import android.app.Application;
-import android.content.Context;
+import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 
-public class App extends Application {
-
-    public static Context context;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = getApplicationContext();
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        context = applicationContext
     }
 
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        @JvmField
+        var context: Context? = null
+    }
 }
